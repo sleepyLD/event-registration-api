@@ -1,8 +1,6 @@
 # Event Registration API
 
-使用 **FastAPI + PostgreSQL** 建立的小型限額活動報名 API。展示基本 REST API、資料驗證、Migration、交易與自動化測試。
-
-這是範圍有限的後端練習／面試展示專案，使用 AI 協助開發。不包含前端、登入、付款或正式營運所需的授權機制。
+使用 **FastAPI + PostgreSQL** 建立的小型限額活動報名 API。進行基本的 REST API、資料驗證、Migration、交易與自動化測試。
 
 ## 功能
 
@@ -77,13 +75,3 @@ HTTP → FastAPI / Pydantic → registration service → SQLAlchemy → PostgreS
 每次報名或取消先以 SELECT ... FOR UPDATE 鎖定活動，再於同一 transaction 內變更報名紀錄與剩餘名額。所有操作遵守相同鎖定順序；失敗時整筆 rollback。同活動的名額修改會依序進行，設計簡單但高競爭時會等待鎖。
 
 交易完成後應滿足：0 ≤ remaining_slots ≤ capacity、active_count + remaining_slots = capacity，且同人同活動最多一筆 active。CHECK 保護單列數值；partial unique 保護重複有效報名；跨表計數一致性仍依賴交易，不能只靠 CHECK。
-
-## 範圍與限制
-
-- user_id 是測試身分，沒有認證或授權；不應直接部署為公開營運系統。
-- 沒有前端、分頁、Redis、背景佇列、付款或效能數據；尚未完成原企畫書的完整 benchmark / baseline。
-- 本機小規模並發測試通過也不能代表任意負載、網路故障與正式環境下的保證。
-- image 使用可更新的 Python 3.11 / PostgreSQL 17 標籤；Python 套件版本已鎖定。
-- 單一 PostgreSQL、同步 SQLAlchemy；不涉及跨服務一致性。
-
-面試前閱讀 [複習筆記](docs/interview-notes.md)；上傳步驟見 [GitHub 發布](docs/publishing.md)。
