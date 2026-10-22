@@ -1,0 +1,29 @@
+# Separate project/server/network, no development database access.
+name: event-registration-tests
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: event_registration_test
+      POSTGRES_USER: event_test
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/init_env.py first}
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U event_test -d event_registration_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  tests:
+    build:
+      context: .
+      target: test
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: event_registration_test
+      POSTGRES_USER: event_test
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/init_env.py first}
+      ALLOW_TEST_DATABASE: "1"
+    depends_on:
+      db:
+        condition: service_healthy

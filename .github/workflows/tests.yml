@@ -1,0 +1,14 @@
+name: tests
+on: [push, pull_request]
+jobs:
+  postgres-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate temporary local credentials
+        run: python3 scripts/init_env.py
+      - name: Run PostgreSQL integration and concurrency tests
+        run: docker compose -f compose.test.yaml up --build --abort-on-container-exit --exit-code-from tests
+      - name: Stop test environment
+        if: always()
+        run: docker compose -f compose.test.yaml down

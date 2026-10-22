@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+.env.*
+!.env.example
+*.log
+.coverage
+htmlcov/
+
+# Local planning/history and machine-specific raw logs stay on this computer.
+docs/archive/
+docs/evidence/
+docs/stage-*
+docs/plan-review.md
+docs/decisions.md
+docs/test-scenarios.md
