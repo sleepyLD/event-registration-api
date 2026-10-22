@@ -52,8 +52,6 @@ init_env.py 產生隨機密碼到 .env，已存在則保留；.env 不提交 Git
 | GET | /events/{event_id}/registrations | 有效報名名單 |
 | DELETE | /events/{event_id}/registrations/{user_id} | 取消報名 |
 
-完整欄位與錯誤格式見 [API 合約](docs/specification.md)；執行中的 Swagger 可直接試操作。
-
 ## 測試
 
 ~~~powershell
@@ -64,7 +62,6 @@ python scripts/check_project.py
 
 測試包含輸入驗證、循序報名與重報、資料庫 CHECK / FK / partial unique、Migration 升降版、交易回滾，以及 20 個請求競爭名額、重複報名／取消、混合操作。並發測試以多執行緒 TestClient 呼叫 ASGI app，使用真實 PostgreSQL 交易；不等同於外部 HTTP 高負載測試。
 
-測試狀態及確切數量以 [驗證紀錄](docs/verification.md) 為準。GitHub Actions 設定會在 push / PR 執行同一組測試；尚未上傳前不宣稱雲端 CI 通過。
 
 ## 設計重點
 
